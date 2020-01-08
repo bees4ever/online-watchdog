@@ -33,6 +33,7 @@ build_script:
 test: off
 artifacts:
   - path: build/win-unpacked/*
+  - path: build/mac/*
     name: online-watchdog
 #deploy:
 #  artifacts: online-watchdog
