@@ -30,3 +30,8 @@ build_script:
   - yarn build
 
 test: off
+artifacts:
+  - path: build/mac/*.app 
+    name: online-watchdog
+deploy:
+  artifacts: online-watchdog
