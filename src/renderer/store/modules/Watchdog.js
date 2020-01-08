@@ -1,6 +1,7 @@
-import { remote } from 'electron'
+import { remote, electron } from 'electron'
 const state = {
   dogId: -1,
+  win: new remote.BrowserWindow(),
   watchshift: 0,
   onlineOutages: [],
   currentOutage: -1,
@@ -57,15 +58,39 @@ const actions = {
     commit('WAKEUP_DOG', intID)
   },
   letDogBark ({state, commit}) {
-    var bouncerID = setInterval(() => remote.app.dock.bounce('informational'), 2000)
+    var bouncerID = setInterval(() => {
+    var dock = remote.app.dock
+    if (dock) {
+      remote.app.dock.bounce('informational')
+    } else {
+      new window.Notification('WARNUNG: OFFLINE GEGANGEN', {
+        body: "Der Wachund bellt, es gibt keine Verbindung mehr",
+        silent: false // We'll play our own sound
+      })
+      sound.play('DONE')
+    }
+    
+
+
+    }, 2000)
     commit('SET_BOUNDERID', bouncerID)
-    remote.app.dock.setBadge('offline')
+    remote.app.focus()//  .dock.setBadge('offline')
+
+    /*const win = new electron.BrowserWindow()
+    for(var i = 0; i < 100000000; i++)
+      win.setProgressBar(i/100000000) 
+     */
+
   },
   letDogSleep ({ state, dispatch }) {
     clearInterval(state.bouncerID)
     dispatch('labelDocksKennel')
   },
   labelDocksKennel ({state}) {
+    
+    var dock = remote.app.dock
+
+    if (!dock || state.win.isFocused()) return
     if (state.unreadMessageNums.length > 0) {
       remote.app.dock.setBadge('' + state.unreadMessageNums.length)
     } else {
@@ -75,7 +100,6 @@ const actions = {
   runWatchDog ({state, commit, dispatch}) {
     commit('INCREMENT_SHIFT_COUNTER')
 
-    console.log(window.navigator.onLine, state.watchdogOnline)
 
     console.log(state.onlineOutages)
     if (!window.navigator.onLine && state.watchdogOnline) dispatch('startNewOutage') // first appearance of offline state
