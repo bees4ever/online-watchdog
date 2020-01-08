@@ -3,7 +3,7 @@
     Status: <span v-if="watchdogOnline">online <span class="lamp green"></span> </span>
             <span v-if="!watchdogOnline">offline <span class="lamp red"></span> </span>
     <main>
-    {{t}}
+    <b>Ungelesene Nachrichten: {{unreadMessageNums.length}}</b>
     
     </main>
 
@@ -36,7 +36,8 @@
         'onlineOutages',
         'watchshift',
         'currentOutage',
-        'watchdogOnline'
+        'watchdogOnline',
+        'unreadMessageNums'
       ])
     },
     mounted () {
