@@ -9,6 +9,7 @@ branches:
 image: Visual Studio 2017
 platform:
   - x64
+  - osx
 
 cache:
   - node_modules
@@ -31,7 +32,7 @@ build_script:
 
 test: off
 artifacts:
-  - path: build/*
+  - path: build/win-unpacked/*
     name: online-watchdog
 #deploy:
 #  artifacts: online-watchdog
