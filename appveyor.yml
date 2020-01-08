@@ -31,7 +31,7 @@ build_script:
 
 test: off
 artifacts:
-  - path: build/mac/*.app 
+  - path: build/*
     name: online-watchdog
 #deploy:
 #  artifacts: online-watchdog
