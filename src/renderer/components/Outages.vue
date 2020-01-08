@@ -33,11 +33,10 @@
 </template>
 
 <script>
-  // mapGetters,
-  import { mapActions, mapState } from 'vuex'
-  // import { remote } from 'electron'
+  import { mapGetters, mapActions, mapState } from 'vuex'
+  import { remote } from 'electron'
   import { VBtn, VSimpleTable } from 'vuetify/lib'
-  // import { moment } from 'moment'
+    // import { moment } from 'moment'
   export default {
     name: 'main-watcher',
     data () {
@@ -45,10 +44,7 @@
   
       }
     },
-    components: {
-      VSimpleTable,
-      VBtn
-    },
+    components: {},
     computed: {
       ...mapState('Watchdog', [
         'onlineOutages',
@@ -59,8 +55,8 @@
       ])
     },
     mounted () {
-      this.initAndStartWatchDog()
-      setInterval(() => console.warn(this.watchdogOnline), 500)
+        this.initAndStartWatchDog()
+        setInterval(() => console.warn(this.watchdogOnline), 500);
     },
     methods: {
       ...mapActions('Watchdog', [
@@ -68,16 +64,16 @@
         'cleanOutages',
         'readMessage'
       ]),
-      calcDiff (start, end) {
-        var diff = Math.floor((Date.parse(end) - Date.parse(start)) / 1000)
-        var sec = diff % 60
-        diff = (diff - sec) / 60
-        var min = diff % 60
-        diff = (diff - min) / 60
-        var hours = diff
-        return `${hours}:${min}:${sec}`
+      calcDiff(start, end){
+          var diff = Math.floor((Date.parse(end) - Date.parse(start)) / 1000);
+          var sec = diff % 60;
+          diff = (diff-sec) / 60
+          var min = diff % 60
+          diff = (diff-min) / 60;
+          var hours = diff;
+          return `${hours}:${min}:${sec}`
       }
-  
+    
     },
     watch: {
   

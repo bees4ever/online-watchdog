@@ -18,8 +18,8 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
-  // import { remote } from 'electron'
+  import { mapGetters, mapActions, mapState } from 'vuex'
+  import { remote } from 'electron'
   import { VBtn } from 'vuetify/lib'
 
   export default {
@@ -30,9 +30,7 @@
         bouncer: 0
       }
     },
-    components: {
-      VBtn
-    },
+    components: {},
     computed: {
       ...mapState('Watchdog', [
         'onlineOutages',
@@ -44,7 +42,7 @@
     mounted () {
       this.initAndStartWatchDog()
     //       console.log(remote.app)
-    },
+  },
     methods: {
       ...mapActions('Watchdog', [
         'initAndStartWatchDog',
@@ -53,7 +51,7 @@
   
     },
     watch: {
-      watchdogOnline () { /*
+      watchdogOnline () {/*
         if (!this.watchdogOnline) {
           this.bouncer = setInterval(() => remote.app.dock.bounce('informational'), 2000)
           remote.app.dock.setBadge('offline')
@@ -61,7 +59,7 @@
         } else {
           clearInterval(this.bouncer)
           remote.app.dock.setBadge('')
-        } */
+        }*/
       }
     }
   }
