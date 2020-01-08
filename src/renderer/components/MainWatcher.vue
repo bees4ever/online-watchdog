@@ -1,18 +1,26 @@
 <template>
   <div id="wrapper" v-bind:class="{ alertOffline: !watchdogOnline}">
-    
+    Status: <span v-if="watchdogOnline">online <span class="lamp green"></span> </span>
+            <span v-if="!watchdogOnline">offline <span class="lamp red"></span> </span>
     <main>
     {{t}}
     
     </main>
 
+  <div class="my-2">
+            <router-link to="/outages">
+              <v-btn x-large color="success" dark>Details of Outtages</v-btn>
+            </router-link>
+            
+          </div>
     <router-link to="/landing">/landing</router-link>
   </div>
 </template>
 
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex'
-    import { remote } from 'electron'
+  import { remote } from 'electron'
+  import { VBtn } from 'vuetify/lib'
 
   export default {
     name: 'main-watcher',
@@ -29,31 +37,29 @@
         'watchshift',
         'currentOutage',
         'watchdogOnline'
-        ])
+      ])
     },
     mounted () {
       this.initAndStartWatchDog()
-      
-      
-      console.log(remote.app)
-      remote.app.dock.bounce("critial")
+    //       console.log(remote.app)
   },
     methods: {
       ...mapActions('Watchdog', [
-        'initAndStartWatchDog' ,
+        'initAndStartWatchDog',
         'startNewOutage'
-      ]),
-      
+      ])
+  
     },
     watch: {
-      watchdogOnline(){
-        if(!this.watchdogOnline){
-          this.bouncer = setInterval(() => remote.app.dock.bounce("critial"), 2000);
-          remote.app.dock.setBadge("offline")
+      watchdogOnline () {/*
+        if (!this.watchdogOnline) {
+          this.bouncer = setInterval(() => remote.app.dock.bounce('informational'), 2000)
+          remote.app.dock.setBadge('offline')
+          remote.app.dock.show()
         } else {
           clearInterval(this.bouncer)
-          remote.app.dock.setBadge(":)")
-        }
+          remote.app.dock.setBadge('')
+        }*/
       }
     }
   }
@@ -92,6 +98,34 @@
       25%  {background: yellow;}
       50%  {background: orange;}
       100% {background: red;}
+    }
+
+.lamp {
+    border-radius: 100%;
+    width: 10px;
+    display: inline-block;
+    height: 10px;
+}
+
+.green {
+  animation: greenblink 5s infinite;
+}
+
+.red {
+  animation: redblink 5s infinite;
+}
+
+
+ @keyframes greenblink
+    {
+      0%   {background-color: rgb(0, 255, 85);}
+      100% {background-color: rgb(0, 255, 170);}
+    }
+
+    @keyframes redblink
+    {
+      0%   {background-color: rgb(255, 60, 0);}
+      100% {background-color: rgb(255, 0, 0);}
     }
 
 </style>

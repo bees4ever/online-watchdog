@@ -16,6 +16,11 @@ export default new Router({
       component: require('@/components/LandingPage').default
     },
     {
+      path: '/outages',
+      name: 'outages-page',
+      component: require('@/components/Outages').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
