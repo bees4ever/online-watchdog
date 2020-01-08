@@ -1,4 +1,6 @@
-import { remote, electron } from 'electron'
+import { remote } from 'electron'
+import axios from 'axios'
+
 const state = {
   dogId: -1,
   win: new remote.BrowserWindow(),
@@ -98,14 +100,24 @@ const actions = {
     }
   },
   runWatchDog ({state, commit, dispatch}) {
+    axios.get('https://jsonplaceholder.typicode.com/todos/1')
+      .then(data => {
+        dispatch('watchDogValidate', true)
+      }).catch(data => {
+        // connection is broken
+        dispatch('watchDogValidate', false)
+      })
     commit('INCREMENT_SHIFT_COUNTER')
 
+  },
+  watchDogValidate ({commit, state, dispatch}, online) {
+    console.log(online, state.watchdogOnline)
 
     console.log(state.onlineOutages)
-    if (!window.navigator.onLine && state.watchdogOnline) dispatch('startNewOutage') // first appearance of offline state
-    else if (window.navigator.onLine && !state.watchdogOnline) dispatch('finishCurrentOutage') // first appearance of online state
+    if (!online && state.watchdogOnline) dispatch('startNewOutage') // first appearance of offline state
+    else if (online && !state.watchdogOnline) dispatch('finishCurrentOutage') // first appearance of online state
 
-    commit('SET_ONLINE', window.navigator.onLine)
+    commit('SET_ONLINE', online)
   },
   startNewOutage ({commit, dispatch}) {
     commit('INCREMENT_CURRENT_OUTAGE')
